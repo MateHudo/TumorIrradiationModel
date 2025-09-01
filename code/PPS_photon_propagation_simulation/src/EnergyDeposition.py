@@ -24,7 +24,7 @@ class Edep_analyser:
 
     def analyse(self):
         self.load_energy_deposition()
-        self.normalize(threshold_ratio=0.01)
+        self.normalize(threshold_ratio=None)
         return self.Edep_map_normalized
 
     def load_energy_deposition(self):
@@ -39,12 +39,15 @@ class Edep_analyser:
                 self.energy_deposition[i_pixel, j_pixel] += Edep
         self.Edep_map = self.energy_deposition.T[::-1][:]
 
-    def normalize(self, threshold_ratio=0.01):
+    def normalize(self, threshold_ratio=None):
         matrix = self.Edep_map
         max_val = np.max(matrix)
-        threshold = threshold_ratio * max_val
-        result = np.where((matrix < threshold) | (matrix < 0), 0, matrix)
-        self.Edep_map_normalized = result / max_val
+        if threshold_ratio != None:
+            threshold = threshold_ratio * max_val
+            result = np.where((matrix < threshold) | (matrix < 0), 0, matrix)
+            self.Edep_map_normalized = result / max_val
+        else:
+            self.Edep_map_normalized = matrix / max_val
 
     def plot(self, normalized=True,title = 'Energy Deposition Map'):
         data = self.energy_deposition.T

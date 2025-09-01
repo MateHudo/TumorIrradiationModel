@@ -123,6 +123,7 @@ class photon_propagation_simulator:
             fpath = os.path.join(self.subfolder_name, filename)
             analyzer = EDP.Edep_analyser(fpath, self.num_pixels, self.num_pixels, detector_shape=self.tissue_box)
             SIF_simulation[i] = analyzer.analyse()
+            analyzer.plot(normalized=True, title=f"SIF for beam index {i}")
         self.SIF_simulation = SIF_simulation
         #return SIF_simulation
 
