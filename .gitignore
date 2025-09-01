@@ -1,0 +1,4 @@
+#.gitignore
+#code/PPS_photon_propagation_simulation/initial_output/
+#code/PPS_photon_propagation_simulation/simulation_data/
+#code/*

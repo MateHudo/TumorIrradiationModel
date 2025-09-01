@@ -32,7 +32,25 @@ def expand_to_4Nbeams(matrix_3d):
         # For SIF_total[N + k], flip columns (reverse each row)
         SIF_total[N + k] = mat[:, ::-1]
         # For SIF_total[2*N + k], transpose and flip columns
-        SIF_total[2*N + k] = mat.T[:, ::-1]
+        SIF_total[3*N - k-1] = mat.T[:, ::-1]
         # For SIF_total[3*N + k], transpose and flip rows
         SIF_total[3*N + k] = mat.T[::-1, :]
     return SIF_total
+
+
+def repair_wrong_expansion(matrix):
+    num_beams = matrix.shape[0] # number of beams in one direction
+    num_side = num_beams // 4
+    #num_beams = 4 * N # four direction we have
+    #n_upper = (N+1)//2
+
+    repaired = matrix
+    # we need to switch order of factos/matrices for 3rd line of beams, so we need to flip the matrices
+    for k in range(num_side):
+        repaired[2*num_side + k] = matrix[k].T[:, ::-1]
+    return repaired
+
+def repair_SIF_matrix(filepath):
+    matrix = np.load(filepath)
+    repaired = repair_wrong_expansion(matrix)
+    return repaired

@@ -95,7 +95,7 @@ class tissue_irradiation_optimizer:
             print("Run optimize() first.")
             return
 
-        fig, ax = plt.subplots(figsize=(8, 8))
+        fig, ax = plt.subplots(figsize=(22, 22))
         cmap = colors.LinearSegmentedColormap.from_list('custom_bw', ['white', 'black'])
         im = ax.imshow(self.tissue_dose_matrix, cmap=cmap, interpolation='nearest', 
                        vmin=np.min(self.tissue_dose_matrix), vmax=np.max(self.tissue_dose_matrix),
@@ -139,7 +139,7 @@ class tissue_irradiation_optimizer:
                 # Left edge arrow for row beams
                 ax.arrow(-0.9, beam_idx, arrow_length, 0, head_width=arrow_head_width, head_length=arrow_head_length,
                          fc='blue', ec='blue', linewidth=1.2, length_includes_head=True, zorder=10)
-                ax.text(-0.9, beam_idx, f"{intensity_left:.0f}", va='center', ha='right', color='blue', fontsize=11)
+                ax.text(-0.5, beam_idx, f"{intensity_left:.0f}", va='center', ha='right', color='blue', fontsize=11)
             if intensity_right > 0:
                 # Right edge arrow for row beams
                 ax.arrow(self.ncols-0.0, beam_idx, -arrow_length, 0, head_width=arrow_head_width, head_length=arrow_head_length,
@@ -154,7 +154,7 @@ class tissue_irradiation_optimizer:
                 # Top edge arrow for column beams
                 ax.arrow(beam_idx, -0.9, 0, arrow_length, head_width=arrow_head_width, head_length=arrow_head_length,
                          fc='green', ec='green', linewidth=1.2, length_includes_head=True, zorder=10)
-                ax.text(beam_idx, -0.7, f"{intensity_top:.0f}", va='bottom', ha='center', color='green', fontsize=11)
+                ax.text(beam_idx, -0.5, f"{intensity_top:.0f}", va='bottom', ha='center', color='green', fontsize=11)
             if intensity_bottom > 0:
                 # Bottom edge arrow for column beams
                 ax.arrow(beam_idx, self.nrows-0.3, 0, -arrow_length, head_width=arrow_head_width, head_length=arrow_head_length,
@@ -185,3 +185,5 @@ class tissue_irradiation_optimizer:
         avg_dose_healthy = self.tissue_dose_matrix[healthy_mask].mean() if np.any(healthy_mask) else 0
         print(f"Average dose to tumor cells: {avg_dose_tumor:.2f}")
         print(f"Average dose to healthy cells: {avg_dose_healthy:.2f}")
+        self.avg_dose_healthy = avg_dose_healthy
+        print(f"Ratio (tumor:healthy) = {avg_dose_tumor / avg_dose_healthy:.2f}" if avg_dose_healthy > 0 else "Ratio (tumor:healthy) = Inf")
